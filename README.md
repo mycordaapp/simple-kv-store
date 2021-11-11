@@ -23,6 +23,23 @@ There payload can in 3 types
 - A Kotlin class that corresponds to the rules of [Really Simple Serialisation(rss)](https://github.com/mycordaapp/really-simple-serialisation#readme).
 - Plain text (CLOB)
 - Binary (BLOB)
+
+
+## Adding to a project 
+
+Maven jars are deployed using [JitPack](https://jitpack.io/).
+See [releases](https://github.com/mycordaapp/simple-kv-store/releases) for version details.
+
+```groovy
+//add jitpack repo
+maven { url "https://jitpack.io" }
+
+// add dependency 
+implementation "com.github.mycordaapp:simple-kv-store:<release>"
+```
+
+_JitPack build status is at https://jitpack.io/com/github/mycordaapp/simple-kv-store/$releaseTag/build.log_
+
   
 ## Dependencies
 
