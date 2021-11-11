@@ -36,4 +36,4 @@ As with everything in [myCorda dot App](https://mycorda.app), this library has m
 
 ## Next Steps 
 
-* [Using](docs/kv-store.md) the kv store/
+* [Using](docs/kv-store.md) the kv store.
