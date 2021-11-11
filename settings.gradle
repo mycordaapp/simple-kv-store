@@ -1,0 +1,8 @@
+rootProject.name = 'simple-kv-store'
+
+include "sks"
+project(":sks").projectDir = file("impl")
+include "sks-examples"
+project(":sks-examples").projectDir = file("examples")
+
+
