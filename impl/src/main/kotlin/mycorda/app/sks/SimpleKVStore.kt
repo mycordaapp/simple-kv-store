@@ -1,17 +1,17 @@
 package mycorda.app.sks
 
 import mycorda.app.rss.JsonSerialiser
-import mycorda.app.types.UniqueId
+
 
 class SimpleKVStore(initialCapacity: Int = 10) : SKS {
-    private val lookup = HashMap<UniqueId, SKSValue>(initialCapacity)
+    private val lookup = HashMap<Key, SKSValue>(initialCapacity)
     private val rss = JsonSerialiser()
 
-    override fun get(key: UniqueId): SKSValue {
+    override fun get(key: Key): SKSValue {
         return lookup[key]!!
     }
 
-    override fun <T> getDeserialised(key: UniqueId): T {
+    override fun <T> getDeserialised(key: Key): T {
         val raw = get(key)
         if (raw.type == SKSValueType.Serialisable) {
             @Suppress("UNCHECKED_CAST")
@@ -21,7 +21,7 @@ class SimpleKVStore(initialCapacity: Int = 10) : SKS {
         }
     }
 
-    override fun put(key: UniqueId, value: Any, type: SKSValueType): SKSWriter {
+    override fun put(key: Key, value: Any, type: SKSValueType): SKSWriter {
         when (type) {
             SKSValueType.Text -> {
                 if ((value is String)) {
@@ -47,7 +47,7 @@ class SimpleKVStore(initialCapacity: Int = 10) : SKS {
         return this
     }
 
-    override fun remove(key: UniqueId): SKSWriter {
+    override fun remove(key: Key): SKSWriter {
         lookup.remove(key)
         return this
     }

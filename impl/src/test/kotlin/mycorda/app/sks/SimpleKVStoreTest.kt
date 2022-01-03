@@ -11,9 +11,9 @@ class SimpleKVStoreTestTest {
     @Test
     fun `should store and read a value`() {
         val sks = SimpleKVStore()
-        val textKey = UniqueId("textKey")
-        val binaryKey = UniqueId("binaryKey")
-        val objectKey = UniqueId("objectKey")
+        val textKey = Key("textKey")
+        val binaryKey = Key("binaryKey")
+        val objectKey = Key("objectKey")
         val someBinary = "hello world".toByteArray()
 
         sks.put(textKey, SKSValue("hello world", SKSValueType.Text))
