@@ -1,5 +1,6 @@
 package mycorda.app.sks
 
+import mycorda.app.types.Key
 import java.lang.RuntimeException
 
 enum class SKSValueType {
@@ -29,7 +30,7 @@ class SKSWriteException(message: String) : SKSException(message)
 class SKSReadException(message: String) : SKSException(message)
 
 interface SKSWriter {
-    fun put(keyValue: SKSKeyValue): SKSWriter
+    fun put(kv: SKSKeyValue): SKSWriter
 
     fun put(key: Key, value: Any, type: SKSValueType): SKSWriter {
         return put(SKSKeyValue(key, value, type))

@@ -1,6 +1,7 @@
 package mycorda.app.sks
 
 import mycorda.app.rss.JsonSerialiser
+import mycorda.app.types.Key
 
 
 class SimpleKVStore(initialCapacity: Int = 10) : SKS {

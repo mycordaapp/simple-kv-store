@@ -2,6 +2,7 @@ package mycorda.app.sks
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import mycorda.app.types.Key
 import org.junit.jupiter.api.Test
 
 class SimpleKVStoreTestTest {
