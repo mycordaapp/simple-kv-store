@@ -8,40 +8,46 @@ enum class SKSValueType {
     Binary
 }
 
-data class SKSValue(val value: Any, val type: SKSValueType)
+data class SKSValue(val data: Any, val type: SKSValueType)
+data class SKSKeyValue(val key: Key, val value: Any, val type: SKSValueType) {
+    fun toText(): String {
+        if (type == SKSValueType.Text) {
+            return value as String
+        } else throw SKSReadException("${type} for ${key} is not of type SKSValueType.Text")
+    }
+
+    fun toBinary(): ByteArray {
+        if (type == SKSValueType.Binary) {
+            return value as ByteArray
+        } else throw SKSReadException("${type} for ${key} is not of type SKSValueType.Binary")
+    }
+
+}
 
 sealed class SKSException(message: String) : RuntimeException(message)
 class SKSWriteException(message: String) : SKSException(message)
 class SKSReadException(message: String) : SKSException(message)
 
-
 interface SKSWriter {
-    fun put(key: Key, value: Any, type: SKSValueType): SKSWriter
+    fun put(keyValue: SKSKeyValue): SKSWriter
+
+    fun put(key: Key, value: Any, type: SKSValueType): SKSWriter {
+        return put(SKSKeyValue(key, value, type))
+    }
+
     fun put(key: Key, value: SKSValue): SKSWriter {
-        return put(key, value.value, value.type)
+        return put(SKSKeyValue(key, value.data, value.type))
     }
 
     fun remove(key: Key): SKSWriter
 }
 
 interface SKSReader {
-    fun get(key: Key): SKSValue
-    fun getText(key: Key): String {
-        val result = get(key)
-        if (result.type == SKSValueType.Text) {
-            return result.value as String
-        } else throw SKSReadException("${result.type} is not of type SKSValueType.Text")
-    }
+    fun get(key: Key): SKSKeyValue
 
-    fun getBinary(key: Key): ByteArray {
-        val result = get(key)
-        if (result.type == SKSValueType.Binary) {
-            return result.value as ByteArray
-        } else throw SKSReadException("${result.type} is not of type SKSValueType.Binary")
-    }
+    fun <T> deserialise(kv: SKSKeyValue): T
 
-    fun <T> getDeserialised(key: Key): T
-
+    fun getList(prefix: Key): Iterable<SKSKeyValue>
 }
 
 interface SKS : SKSReader, SKSWriter

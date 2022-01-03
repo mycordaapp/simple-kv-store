@@ -2,9 +2,7 @@ package mycorda.app.sks
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import mycorda.app.types.UniqueId
 import org.junit.jupiter.api.Test
-
 
 class SimpleKVStoreTestTest {
 
@@ -20,10 +18,23 @@ class SimpleKVStoreTestTest {
         sks.put(binaryKey, SKSValue(someBinary, SKSValueType.Binary))
         sks.put(objectKey, SKSValue(Demo("abc", 123), SKSValueType.Serialisable))
 
-        assertThat(sks.getText(textKey), equalTo("hello world"))
-        assertThat(sks.getBinary(binaryKey).size, equalTo(someBinary.size))
-        assertThat(sks.getDeserialised(objectKey), equalTo( Demo("abc", 123)))
+        assertThat(sks.get(textKey).toText(), equalTo("hello world"))
+        assertThat(sks.get(binaryKey).toBinary().size, equalTo(someBinary.size))
+        assertThat(sks.deserialise(sks.get(objectKey)), equalTo(Demo("abc", 123)))
+    }
 
+    @Test
+    fun `should read by prefix`() {
+        val sks = SimpleKVStore()
+
+        sks.put(Key("foo1"), SKSValue("bar1", SKSValueType.Text))
+        sks.put(Key("foo"), SKSValue("bar", SKSValueType.Text))
+        sks.put(Key("foo2"), SKSValue("bar2", SKSValueType.Text))
+        sks.put(Key("etcd"), SKSValue("etcd", SKSValueType.Text))
+
+        val filtered = sks.getList(Key("foo")).toList()
+        assertThat(filtered.size, equalTo(3))
+        assertThat(filtered.map { it.key.key }, equalTo(listOf("foo", "foo1", "foo2")))
     }
 
 }
